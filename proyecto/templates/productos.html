@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Productos | Inventario{% endblock %}
+
+{% block content %}
+<section class="tarjeta">
+    <div class="titulo-fila">
+        <h2>Productos</h2>
+        <a class="boton boton-primario" href="{{ url_for('producto_nuevo') }}">Nuevo producto</a>
+    </div>
+
+    <form class="buscador" method="get" action="{{ url_for('productos') }}">
+        <label for="buscar">Buscar por código, nombre o categoría</label>
+        <div class="buscador-controles">
+            <input id="buscar" name="buscar" type="search" value="{{ buscar }}" placeholder="Escribe tu búsqueda">
+            <button class="boton boton-primario" type="submit">Buscar</button>
+            <a class="boton boton-secundario" href="{{ url_for('productos') }}">Limpiar</a>
+        </div>
+    </form>
+
+    <div class="tabla-contenedor">
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Existencia</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td>{{ producto.codigo }}</td>
+                    <td>{{ producto.nombre }}</td>
+                    <td>{{ producto.categoria }}</td>
+                    <td>{{ producto.precio }}</td>
+                    <td>{{ producto.existencia }}</td>
+                    <td>{{ 'Activo' if producto.activo else 'Inactivo' }}</td>
+                    <td class="acciones">
+                        <a class="boton boton-editar" href="{{ url_for('producto_editar', id=producto.id) }}">Editar</a>
+                        <form method="post" action="{{ url_for('producto_eliminar', id=producto.id) }}" onsubmit="return confirm('¿Está seguro de eliminar este producto?');">
+                            <button class="boton boton-eliminar" type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" class="vacio">No se encontraron productos.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

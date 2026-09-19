@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Editar producto' if producto else 'Nuevo producto' }} | Inventario{% endblock %}
+
+{% block content %}
+{% set datos = datos if datos is defined else producto %}
+<section class="tarjeta formulario-tarjeta">
+    <h2>{{ 'Editar producto' if producto else 'Nuevo producto' }}</h2>
+    <form method="post" action="{{ url_for('producto_editar', id=producto.id) if producto else url_for('producto_nuevo') }}">
+        <div class="campo">
+            <label for="codigo">Código *</label>
+            <input id="codigo" name="codigo" type="text" value="{{ datos.codigo if datos else '' }}" required>
+        </div>
+        <div class="campo">
+            <label for="nombre">Nombre *</label>
+            <input id="nombre" name="nombre" type="text" value="{{ datos.nombre if datos else '' }}" required>
+        </div>
+        <div class="campo">
+            <label for="categoria">Categoría</label>
+            <input id="categoria" name="categoria" type="text" value="{{ datos.categoria if datos else '' }}">
+        </div>
+        <div class="campo">
+            <label for="precio">Precio</label>
+            <input id="precio" name="precio" type="number" step="0.01" min="0" value="{{ datos.precio if datos else '0.00' }}">
+        </div>
+        <div class="campo">
+            <label for="existencia">Existencia</label>
+            <input id="existencia" name="existencia" type="number" min="0" value="{{ datos.existencia if datos else '0' }}">
+        </div>
+        <div class="campo casilla">
+            <input id="activo" name="activo" type="checkbox" {% if datos and datos.activo %}checked{% endif %}>
+            <label for="activo">Activo</label>
+        </div>
+        <div class="formulario-acciones">
+            <button class="boton boton-primario" type="submit">Guardar</button>
+            <a class="boton boton-secundario" href="{{ url_for('productos') }}">Cancelar</a>
+        </div>
+    </form>
+</section>
+{% endblock %}
